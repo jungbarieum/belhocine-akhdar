@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+
+<style>
+body{
+  margin:0;
+  font-family:"Poppins",sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  background:url('money.jpg') no-repeat center center fixed;
+  background-size:cover;
+  overflow:hidden;
+  color:#fff;
+}
+
+/* ========== إضافات فقط (بدون حذف أو تعديل) ========== */
+
+/* زر الهمبرغر فقط */
+.hamburger{
+  position:fixed;
+  top:15px;
+  left:15px;
+  width:28px;
+  height:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+  z-index:10000;
+}
+
+.hamburger span{
+  height:3px;
+  background:#fff;
+  border-radius:3px;
+  box-shadow:0 0 6px #69ffe4;
+}
+
+/* الشريط الجانبي (مخفي تماما) */
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:260px;
+  height:100%;
+  background:url('newout.jpg') no-repeat center center;
+  background-size:cover;
+  box-shadow:5px 0 20px rgba(0,0,0,.8);
+  transition:left .4s ease;
+  z-index:9999;
+  padding:20px;
+}
+
+.sidebar.active{
+  left:0;
+}
+
+.sidebar h2{
+  margin-top:70px;
+  font-size:18px;
+  text-align:center;
+}
+
+.sidebar p{
+  font-size:12px;
+  opacity:.8;
+  margin-top:12px;
+  text-align:center;
+}
+
+/* ========== كودك الأصلي (لم يُمس) ========== */
+
+/* شاشة التحميل بخلفية صورة */
+#loader{
+  position:fixed;
+  inset:0;
+  background: url('out1.jpg') no-repeat center center;
+  background-size:cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:9999;
+  transition:opacity .5s ease, visibility .5s ease;
+}
+#loader.hide{
+  opacity:0;
+  visibility:hidden;
+}
+
+/* شريط التحميل */
+.loader-bar{
+  width:300px;
+  height:12px;
+  border-radius:6px;
+  overflow:hidden;
+  position:relative;
+  border:2px solid #373636;
+  box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+  margin-top:10px;
+}
+
+.loader-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:0%;
+  background: linear-gradient(90deg, #19facf, #0cf7ff);
+  border-radius:6px;
+  transition:width 0.05s linear;
+  box-shadow: 0 0 10px #068c8c, 0 0 20px #09e1b9, 0 0 30px #69ffe4;
+}
+
+.loader-text{
+  color: #000000;
+  font-weight:bold;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #69ffd2;
+  margin-bottom:5px;
+  font-size:16px;
+}
+
+/* ====== الكرت ====== */
+.card{
+  background:linear-gradient(145deg, rgba(40, 202, 188, 0.83),#11001c);
+  width:280px;
+  padding:25px;
+  border-radius:18px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+  transform-style:preserve-3d;
+  transition:transform .1s linear;
+  position:relative;
+  overflow:hidden;
+
+  opacity:0;
+  transform:translateY(40px) scale(.95);
+  animation:cardIn 1.5s ease forwards;
+  animation-delay:.5s;
+}
+
+@keyframes cardIn{
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:-50%; left:-50%;
+  width:200%; height:200%;
+  background: linear-gradient(120deg,
+    rgba(255,255,255,0.3),
+    rgba(255,255,255,0),
+    rgba(255,255,255,0.3));
+  transform:rotate(45deg);
+  animation: glow 3s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes glow{
+  0%{transform:translate(-100%,-100%) rotate(45deg);}
+  100%{transform:translate(100%,100%) rotate(45deg);}
+}
+
+.avatar{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #69ffe4;
+  box-shadow:0 0 15px #ffffff;
+  position:relative;
+  z-index:1;
+
+  opacity:0;
+  transform:translateY(-20px);
+  animation:fadeInUp 0.6s forwards;
+  animation-delay:1.8s;
+}
+
+h1{
+  margin:12px 0 5px;
+  font-size:20px;
+  z-index:1;
+
+  opacity:0;
+  transform:translateY(-20px);
+  animation:fadeInUp 0.6s forwards;
+  animation-delay:2s;
+}
+
+p{
+  font-size:12px;
+  opacity:.8;
+  margin-bottom:15px;
+  z-index:1;
+
+  opacity:0;
+  transform:translateY(-20px);
+  animation:fadeInUp 0.6s forwards;
+  animation-delay:2.2s;
+}
+
+.links a{
+  display:block;
+  margin:8px 0;
+  padding:10px;
+  border-radius:12px;
+  text-decoration:none;
+  color:#fff;
+  background:rgba(255,255,255,.15);
+  transition:.25s;
+  z-index:1;
+
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeInUp 0.6s forwards;
+}
+
+.links a:hover{
+  background: #69fffa;
+  box-shadow:0 0 15px #69ffe4;
+  transform:scale(1.05);
+}
+
+.copyright{
+  font-size:10px;
+  opacity:.6;
+  margin-top:12px;
+  z-index:1;
+
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeInUp 0.6s forwards;
+  animation-delay:3.2s;
+}
+
+@keyframes fadeInUp{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media(max-width:400px){
+  .card{width:240px;padding:18px;}
+}
+</style>
+</head>
+<body>
+
+<!-- زر الهمبرغر فقط -->
+<div class="hamburger" onclick="toggleSidebar()">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<!-- الشريط الجانبي المخفي -->
+<div class="sidebar" id="sidebar">
+  <h2>الأستاذ بلحسين لخضر</h2>
+  <p>متحصل على 3 باكالوريات شهادتي ليسانس : </p>
+  <p>شهادة الليسانس في المالية وليسانس في الحقوق</p>
+  <p>شهادة الماجستير في المالية شهادة الدكتوراه في المالية</p>
+  <p>أستاذ مواد :</p>
+  <P>حاسبة مالية مالية المؤسسة، تسيير مالي، تسيير محاسبي ( / رياضيات / قانون / اقتصاد ومانجمنت</P>
+  <p>© All Rights Reserved</p>
+  <p>©created by jundbarieum</p>
+</div>
+
+<!-- شاشة التحميل -->
+<div id="loader">
+  <div class="loader-text">جاري التحميل...</div>
+  <div class="loader-bar">
+    <div class="loader-fill"></div>
+  </div>
+</div>
+
+<!-- الكرت -->
+<div class="card" id="card">
+  <img src="face.jpg" class="avatar">
+  <h1>الأستاذ بلحسين لخضر</h1>
+  <p>:صفحاتي</p>
+
+  <div class="links">
+    <a href="https://www.instagram.com/belhocine.bac?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="animation-delay:2.4s;">Instagram</a>
+    <a href="https://www.facebook.com/share/1NE8RSUH6N/" target="_blank" style="animation-delay:2.6s;">Facebook</a>
+    <a href="https://www.tiktok.com/@lakhdarbelhocine?is_from_webapp=1&sender_device=pc" target="_blank" style="animation-delay:2.8s;">tiktok</a>
+    <a href="https://youtube.com/@prof_comptra?si=x1t7Q4kuQYKi-Pzi" target="_blank" style="animation-delay:3s;">YouTube</a>
+    <a href="mailto:belhocinebac@gmail.com" style="animation-delay:3.2s;">Email</a>
+  </div>
+
+  <div class="copyright">★صلِ على النبي★</div>
+</div>
+
+<script>
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("active");
+}
+
+const card = document.getElementById("card");
+const loader = document.getElementById("loader");
+const fill = document.querySelector(".loader-fill");
+let x=0,y=0,tx=0,ty=0;
+
+window.addEventListener("load",()=>{
+  let progress = 0;
+  const duration = 3000;
+  const interval = 10;
+  const step = interval/duration*100;
+
+  const anim = setInterval(()=>{
+    progress += step;
+    if(progress>100) progress=100;
+    fill.style.width = progress + "%";
+    if(progress>=100){
+      clearInterval(anim);
+      setTimeout(()=>loader.classList.add("hide"), 200);
+    }
+  }, interval);
+});
+
+document.addEventListener("mousemove",e=>{
+  const r=card.getBoundingClientRect();
+  tx=(e.clientX-r.left-r.width/2)/20;
+  ty=-(e.clientY-r.top-r.height/2)/20;
+});
+
+function handleOrientation(e){
+  tx=e.gamma/4;
+  ty=-e.beta/4;
+}
+
+if (typeof DeviceOrientationEvent !== "undefined" &&
+    typeof DeviceOrientationEvent.requestPermission === "function"){
+  DeviceOrientationEvent.requestPermission().then(p=>{
+    if(p==="granted"){
+      window.addEventListener("deviceorientation",handleOrientation);
+    }
+  });
+}else{
+  window.addEventListener("deviceorientation",handleOrientation);
+}
+
+function animate(){
+  x+=(tx-x)*0.1;
+  y+=(ty-y)*0.1;
+  card.style.transform=`rotateX(${y}deg) rotateY(${x}deg)`;
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
